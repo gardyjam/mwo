@@ -64,3 +64,19 @@ jobs:
           app-name: 'mwo1'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EF58E00F1D2142B189E6168386D10E9E }}
+
+
+  promote-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy
+    environment:
+      name: 'Development'
+      url: ${{ needs.deploy.outputs.url }}
+    
+    steps:
+      - name: Deploy to Azure Web App (Development)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'mwo1-dev'
+          slot-name: 'Development'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DEV }}
